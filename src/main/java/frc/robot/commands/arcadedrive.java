@@ -17,19 +17,19 @@ public class arcadedrive extends Command {
 
     @Override
     public void execute() {
-    double speed = controller.getLeftY();
-    double rotation = controller.getRightX();
-    double limit;
+    double FORWARD = controller.getLeftY();
+    double ROTATION = controller.getRightX();
+    double LIMIT;
 
     if(controller.getLeftBumper()){
-        limit = 0.6;
+        LIMIT = 0.6;
     } else if (controller.getRightBumper()){
-        limit = 1;
+        LIMIT = 1;
     }else {
-        limit = 1;
+        LIMIT = 1;
     }
 
-    m_chassi.arcadedrive(speed*limit, rotation*limit);
+    m_chassi.arcadedrive(FORWARD*LIMIT, ROTATION*LIMIT);
     }
 
     @Override

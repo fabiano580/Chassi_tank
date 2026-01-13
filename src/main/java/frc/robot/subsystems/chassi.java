@@ -1,44 +1,47 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.*;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class chassi extends SubsystemBase{
 
-    private final SparkMax leftfront;
-    private final SparkMax leftback;
-    private final SparkMax rightfront;
-    private final SparkMax rightback;
-
-    private final MotorControllerGroup leftgroup;
-    private final MotorControllerGroup rightgroup;
+    private final SparkMax LEFT_FOLLOWER;
+    private final SparkMax LEFT_LEADER;
+    private final SparkMax RIGTH_FOLLOWER;
+    private final SparkMax RIGHT_LEADER;
 
     private final DifferentialDrive drive;
 
-    private final Pigeon2 pg;
-
     public chassi() {
-        leftfront = new SparkMax(LF, MotorType.kBrushed);
-        leftback = new SparkMax(LB, MotorType.kBrushed);
-        rightfront = new SparkMax (RF, MotorType.kBrushed);
-        rightback = new SparkMax (RB, MotorType.kBrushed);
+        LEFT_FOLLOWER = new SparkMax(LF, MotorType.kBrushed);
+        LEFT_LEADER = new SparkMax(LL, MotorType.kBrushed);
+        RIGTH_FOLLOWER = new SparkMax (RF, MotorType.kBrushed);
+        RIGHT_LEADER = new SparkMax (RL, MotorType.kBrushed);
 
-        leftgroup = new MotorControllerGroup(leftback, leftfront);
-        rightgroup = new MotorControllerGroup(rightback, rightfront);
+        drive = new DifferentialDrive(LEFT_LEADER, RIGHT_LEADER);
 
-        drive = new DifferentialDrive(leftgroup, rightgroup);
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.voltageCompensation(12);
+    config.smartCurrentLimit(DRIVE_MOTOR_CURRENT_LIMIT);
+    config.follow(LEFT_LEADER);
+    LEFT_FOLLOWER.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    config.follow(RIGHT_LEADER);
+    RIGTH_FOLLOWER.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        pg = new Pigeon2(PG_VALUE);
+    config.disableFollowerMode();
+    RIGHT_LEADER.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    rightgroup.setInverted(true);
+    config.inverted(true);
+    LEFT_LEADER.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
-    public void arcadedrive (double forward, double rotation){;
-        drive.arcadeDrive(forward, rotation);
+    public void arcadedrive (double FORWARD, double ROTATION){;
+        drive.arcadeDrive(FORWARD, ROTATION);
     }
 }
