@@ -6,6 +6,9 @@ public final class Constants {
   public final static short RF = 4;
   public final static short RL = 6;
 
+  public static final short SW = 10;
+  public static final short NE = 15;
+
   public final static short PG_VALUE = 9;
 
   public final static short CONTROLLER1_PORT = 0;
